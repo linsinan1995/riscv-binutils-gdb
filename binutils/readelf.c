@@ -3574,6 +3574,9 @@ get_machine_flags (Filedata * filedata, unsigned e_flags, unsigned e_machine)
 	  if (e_flags & EF_RISCV_RVE)
 	    strcat (buf, ", RVE");
 
+	  if (e_flags & EF_RISCV_RVP)
+	    strcat (buf, ", RVP");
+	  
 	  switch (e_flags & EF_RISCV_FLOAT_ABI)
 	    {
 	    case EF_RISCV_FLOAT_ABI_SOFT:

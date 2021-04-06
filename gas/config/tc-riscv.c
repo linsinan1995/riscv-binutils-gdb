@@ -183,6 +183,7 @@ struct riscv_set_options
   int pic; /* Generate position-independent code.  */
   int rvc; /* Generate RVC code.  */
   int rve; /* Generate RVE code.  */
+  int rvp; /* Generate RVP code. */
   int relax; /* Emit relocs the linker is allowed to relax.  */
   int arch_attr; /* Emit arch attribute.  */
   int csr_check; /* Enable the CSR checking.  */
@@ -193,10 +194,20 @@ static struct riscv_set_options riscv_opts =
   0,	/* pic */
   0,	/* rvc */
   0,	/* rve */
+  0,  /* rvp */
   1,	/* relax */
   DEFAULT_RISCV_ATTR, /* arch_attr */
   0.	/* csr_check */
 };
+
+static void
+riscv_set_rvp (bfd_boolean rvp_value)
+{
+  if (rvp_value)
+    elf_flags |= EF_RISCV_RVP;
+
+  riscv_opts.rvp = rvp_value;
+}
 
 static void
 riscv_set_rvc (bfd_boolean rvc_value)
@@ -237,6 +248,7 @@ riscv_multi_subset_supports (enum riscv_insn_class insn_class)
     case INSN_CLASS_M: return riscv_subset_supports ("m");
     case INSN_CLASS_F: return riscv_subset_supports ("f");
     case INSN_CLASS_D: return riscv_subset_supports ("d");
+    case INSN_CLASS_P: return riscv_subset_supports ("p");
     case INSN_CLASS_Q: return riscv_subset_supports ("q");
 
     case INSN_CLASS_F_AND_C:
@@ -245,6 +257,8 @@ riscv_multi_subset_supports (enum riscv_insn_class insn_class)
     case INSN_CLASS_D_AND_C:
       return (riscv_subset_supports ("d")
 	      && riscv_subset_supports ("c"));
+    case INSN_CLASS_P_AND_C:
+      return riscv_subset_supports ("p") && riscv_subset_supports ("c");
 
     case INSN_CLASS_ZICSR:
       return riscv_subset_supports ("zicsr");
@@ -2856,6 +2870,11 @@ riscv_after_parse_args (void)
   if (riscv_subset_supports ("e"))
     riscv_set_rve (TRUE);
 
+  /* Enable RVP if specified by the -march option.  */
+  riscv_set_rvp (FALSE);
+  if (riscv_subset_supports ("p"))
+    riscv_set_rvp (TRUE);
+    
   /* If the -mpriv-spec isn't set, then we set the default privilege spec
      according to DEFAULT_PRIV_SPEC.  */
   if (default_priv_spec == PRIV_SPEC_CLASS_NONE)
