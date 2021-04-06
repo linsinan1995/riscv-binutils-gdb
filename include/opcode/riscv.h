@@ -308,9 +308,11 @@ enum riscv_insn_class
    INSN_CLASS_D,
    INSN_CLASS_Q,
    INSN_CLASS_P,
-   INSN_CLASS_P_AND_C
+   INSN_CLASS_P_AND_C,
    INSN_CLASS_F_AND_C,
    INSN_CLASS_D_AND_C,
+   INSN_CLASS_ZP64,
+   INSN_CLASS_ZPN,
    INSN_CLASS_ZICSR,
    INSN_CLASS_ZIFENCEI,
    INSN_CLASS_ZIHINTPAUSE,
@@ -365,7 +367,8 @@ enum riscv_isa_spec_class
 };
 
 #define RISCV_UNKNOWN_VERSION -1
-
+#define RISCV_RVP_MAIN_VERSION 9
+#define RISCV_RVP_SUB_VERSION 2
 /* This structure holds version information for specific ISA.  */
 
 struct riscv_ext_version

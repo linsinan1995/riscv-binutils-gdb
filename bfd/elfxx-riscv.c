@@ -1158,7 +1158,10 @@ riscv_ext_dont_care_version (const char *subset)
 {
   if (strcmp (subset, "g") == 0
       || strcmp (subset, "zicsr") == 0
-      || strcmp (subset, "zifencei") == 0)
+      || strcmp (subset, "zifencei") == 0
+	  || strcmp (subset, "p") == 0
+	  || strcmp (subset, "zpn") == 0
+      || strcmp (subset, "zp64") == 0)
     return TRUE;
   return FALSE;
 }
@@ -1761,7 +1764,21 @@ riscv_parse_add_implicit_subsets (riscv_parse_subset_t *rps)
     riscv_parse_add_subset (rps, "zicsr",
 			    RISCV_UNKNOWN_VERSION,
 			    RISCV_UNKNOWN_VERSION, TRUE);
-
+  if ((riscv_lookup_subset (rps->subset_list, "p", &subset)))
+    {
+	  riscv_parse_add_subset (rps, "d",
+			      RISCV_UNKNOWN_VERSION,
+			      RISCV_UNKNOWN_VERSION, TRUE);
+      riscv_parse_add_subset (rps, "f",
+			      RISCV_UNKNOWN_VERSION,
+			      RISCV_UNKNOWN_VERSION, TRUE);
+      riscv_parse_add_subset (rps, "zp64",
+                              RISCV_UNKNOWN_VERSION,
+                              RISCV_UNKNOWN_VERSION, TRUE);
+      riscv_parse_add_subset (rps, "zpn",
+                              RISCV_UNKNOWN_VERSION,
+                              RISCV_UNKNOWN_VERSION, TRUE);
+	}
   if ((riscv_lookup_subset (rps->subset_list, "g", &subset)))
     {
       riscv_parse_add_subset (rps, "zicsr",

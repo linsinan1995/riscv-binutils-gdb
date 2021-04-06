@@ -260,6 +260,10 @@ riscv_multi_subset_supports (enum riscv_insn_class insn_class)
     case INSN_CLASS_P_AND_C:
       return riscv_subset_supports ("p") && riscv_subset_supports ("c");
 
+    case INSN_CLASS_ZP64:
+      return riscv_subset_supports ("zp64");
+    case INSN_CLASS_ZPN:
+      return riscv_subset_supports ("zpn");
     case INSN_CLASS_ZICSR:
       return riscv_subset_supports ("zicsr");
     case INSN_CLASS_ZIFENCEI:
