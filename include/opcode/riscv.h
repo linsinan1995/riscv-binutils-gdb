@@ -139,6 +139,37 @@ static const char * const riscv_pred_succ[16] =
 #define ENCODE_RVC_J_IMM(x) \
   ((RV_X(x, 1, 3) << 3) | (RV_X(x, 4, 1) << 11) | (RV_X(x, 5, 1) << 2) | (RV_X(x, 6, 1) << 7) | (RV_X(x, 7, 1) << 6) | (RV_X(x, 8, 2) << 9) | (RV_X(x, 10, 1) << 8) | (RV_X(x, 11, 1) << 12))
 
+#define OP_MASK_RC		0x1f
+#define OP_SH_RC		25
+#define EXTRACT_PTYPE_IMM3U(x) \
+  (RV_X(x, 20, 3))
+#define EXTRACT_PTYPE_IMM4U(x) \
+  (RV_X(x, 20, 4))
+#define EXTRACT_PTYPE_IMM5U(x) \
+  (RV_X(x, 20, 5))
+#define EXTRACT_PTYPE_IMM6U(x) \
+  (RV_X(x, 20, 6))
+#define EXTRACT_PTYPE_IMM15S(x) \
+  ((-RV_X(x, 24, 1) << 15) | (RV_X(x, 7, 5) << 0) | RV_X(x, 15, 9) << 5)
+#define EXTRACT_ITYPE_IMM6L(x) \
+  (RV_X(x, 20, 6))
+#define VALID_PTYPE_IMM3U(x) (EXTRACT_PTYPE_IMM3U(ENCODE_PTYPE_IMM3U(x)) == (x))
+#define VALID_PTYPE_IMM4U(x) (EXTRACT_PTYPE_IMM4U(ENCODE_PTYPE_IMM4U(x)) == (x))
+#define VALID_PTYPE_IMM5U(x) (EXTRACT_PTYPE_IMM5U(ENCODE_PTYPE_IMM5U(x)) == (x))
+#define VALID_PTYPE_IMM6U(x) (EXTRACT_PTYPE_IMM6U(ENCODE_PTYPE_IMM6U(x)) == (x))
+#define VALID_PTYPE_IMM15S(x) (EXTRACT_PTYPE_IMM15S(ENCODE_PTYPE_IMM15S(x)) == (x))
+#define ENCODE_PTYPE_IMM3U(x) \
+  (RV_X(x, 0, 3) << 20)
+#define ENCODE_PTYPE_IMM4U(x) \
+  (RV_X(x, 0, 4) << 20)
+#define ENCODE_PTYPE_IMM5U(x) \
+  (RV_X(x, 0, 5) << 20)
+#define ENCODE_PTYPE_IMM6U(x) \
+  (RV_X(x, 0, 6) << 20)
+#define ENCODE_PTYPE_IMM15S(x) \
+  ((RV_X(x, 0, 5) << 7) | RV_X(x, 5, 10) << 15)
+#define ENCODE_SBTYPE_IMM6L(x) \
+  (RV_X(x, 0, 6) << 20)
 #define VALID_ITYPE_IMM(x) (EXTRACT_ITYPE_IMM(ENCODE_ITYPE_IMM(x)) == (x))
 #define VALID_STYPE_IMM(x) (EXTRACT_STYPE_IMM(ENCODE_STYPE_IMM(x)) == (x))
 #define VALID_SBTYPE_IMM(x) (EXTRACT_SBTYPE_IMM(ENCODE_SBTYPE_IMM(x)) == (x))
@@ -308,7 +339,6 @@ enum riscv_insn_class
    INSN_CLASS_D,
    INSN_CLASS_Q,
    INSN_CLASS_P,
-   INSN_CLASS_P_AND_C,
    INSN_CLASS_F_AND_C,
    INSN_CLASS_D_AND_C,
    INSN_CLASS_ZP64,
@@ -367,8 +397,8 @@ enum riscv_isa_spec_class
 };
 
 #define RISCV_UNKNOWN_VERSION -1
-#define RISCV_RVP_MAIN_VERSION 9
-#define RISCV_RVP_SUB_VERSION 2
+#define RISCV_RVP_MAIN_VERSION 0
+#define RISCV_RVP_SUB_VERSION 92
 /* This structure holds version information for specific ISA.  */
 
 struct riscv_ext_version

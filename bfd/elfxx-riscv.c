@@ -1761,24 +1761,34 @@ riscv_parse_add_implicit_subsets (riscv_parse_subset_t *rps)
 			      RISCV_UNKNOWN_VERSION, TRUE);
     }
   else if ((riscv_lookup_subset (rps->subset_list, "f", &subset)))
-    riscv_parse_add_subset (rps, "zicsr",
-			    RISCV_UNKNOWN_VERSION,
-			    RISCV_UNKNOWN_VERSION, TRUE);
-  if ((riscv_lookup_subset (rps->subset_list, "p", &subset)))
-    {
-	  riscv_parse_add_subset (rps, "d",
-			      RISCV_UNKNOWN_VERSION,
-			      RISCV_UNKNOWN_VERSION, TRUE);
-      riscv_parse_add_subset (rps, "f",
-			      RISCV_UNKNOWN_VERSION,
-			      RISCV_UNKNOWN_VERSION, TRUE);
-      riscv_parse_add_subset (rps, "zp64",
-                              RISCV_UNKNOWN_VERSION,
-                              RISCV_UNKNOWN_VERSION, TRUE);
-      riscv_parse_add_subset (rps, "zpn",
-                              RISCV_UNKNOWN_VERSION,
-                              RISCV_UNKNOWN_VERSION, TRUE);
+		riscv_parse_add_subset (rps, "zicsr",
+					RISCV_UNKNOWN_VERSION,
+					RISCV_UNKNOWN_VERSION, TRUE);
+  	
+  else if ((riscv_lookup_subset (rps->subset_list, "p", &subset)))
+	{
+		riscv_parse_add_subset (rps, "zpn",
+					RISCV_UNKNOWN_VERSION,
+					RISCV_UNKNOWN_VERSION, TRUE);
+				
+		riscv_parse_add_subset (rps, "zp64",
+				RISCV_UNKNOWN_VERSION,
+				RISCV_UNKNOWN_VERSION, TRUE);
 	}
+  else if ((riscv_lookup_subset (rps->subset_list, "zp64", &subset))) 
+    {
+		riscv_parse_add_subset (rps, "zpn",
+				RISCV_UNKNOWN_VERSION,
+				RISCV_UNKNOWN_VERSION, TRUE);
+
+    } 
+  else if ((riscv_lookup_subset (rps->subset_list, "zpn", &subset))) 
+    {
+		riscv_parse_add_subset (rps, "zp64",
+				RISCV_UNKNOWN_VERSION,
+				RISCV_UNKNOWN_VERSION, TRUE);
+    }
+
   if ((riscv_lookup_subset (rps->subset_list, "g", &subset)))
     {
       riscv_parse_add_subset (rps, "zicsr",
