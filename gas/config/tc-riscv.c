@@ -185,6 +185,7 @@ struct riscv_set_options
   int pic; /* Generate position-independent code.  */
   int rvc; /* Generate RVC code.  */
   int rve; /* Generate RVE code.  */
+  int rvp; /* Generate RVP code. */
   int relax; /* Emit relocs the linker is allowed to relax.  */
   int arch_attr; /* Emit arch attribute.  */
   int csr_check; /* Enable the CSR checking.  */
@@ -195,6 +196,7 @@ static struct riscv_set_options riscv_opts =
   0,	/* pic */
   0,	/* rvc */
   0,	/* rve */
+  0,  /* rvp */
   1,	/* relax */
   DEFAULT_RISCV_ATTR, /* arch_attr */
   0.	/* csr_check */
@@ -213,6 +215,14 @@ static void
 riscv_set_rve (bfd_boolean rve_value)
 {
   riscv_opts.rve = rve_value;
+}
+
+static void
+riscv_set_rvp (bfd_boolean rvp_value)
+{ 
+  if (rvp_value)
+    elf_flags |= EF_RISCV_RVP;
+  riscv_opts.rvp = rvp_value;
 }
 
 static riscv_subset_list_t riscv_subsets;
@@ -239,7 +249,6 @@ riscv_multi_subset_supports (enum riscv_insn_class insn_class)
     case INSN_CLASS_M: return riscv_subset_supports ("m");
     case INSN_CLASS_F: return riscv_subset_supports ("f");
     case INSN_CLASS_D: return riscv_subset_supports ("d");
-    case INSN_CLASS_P: return riscv_subset_supports ("p");
     case INSN_CLASS_Q: return riscv_subset_supports ("q");
 
     case INSN_CLASS_F_AND_C:
@@ -249,10 +258,6 @@ riscv_multi_subset_supports (enum riscv_insn_class insn_class)
       return (riscv_subset_supports ("d")
 	      && riscv_subset_supports ("c"));
 
-    case INSN_CLASS_ZP64:
-      return riscv_subset_supports ("zp64");
-    case INSN_CLASS_ZPN:
-      return riscv_subset_supports ("zpn");
     case INSN_CLASS_ZICSR:
       return riscv_subset_supports ("zicsr");
     case INSN_CLASS_ZIFENCEI:
@@ -269,7 +274,12 @@ riscv_multi_subset_supports (enum riscv_insn_class insn_class)
     case INSN_CLASS_ZBA_OR_ZBB:
       return (riscv_subset_supports ("zba")
 	      || riscv_subset_supports ("zbb"));
-
+    case INSN_CLASS_ZPN:
+      return riscv_subset_supports ("zpn");
+    case INSN_CLASS_ZPRV:
+      return riscv_subset_supports ("zprv");
+    case INSN_CLASS_ZPSF:
+      return riscv_subset_supports ("zpsf");
     default:
       as_fatal ("Unreachable");
       return FALSE;
@@ -1032,6 +1042,7 @@ validate_riscv_insn (const struct riscv_opcode *opc, int length)
       case 'P':	USE_BITS (OP_MASK_PRED,		OP_SH_PRED); break;
       case 'Q':	USE_BITS (OP_MASK_SUCC,		OP_SH_SUCC); break;
       case 'o':
+      case 'l': /* IMM6L */
       case 'j': used_bits |= ENCODE_ITYPE_IMM (-1U); break;
       case 'a':	used_bits |= ENCODE_UJTYPE_IMM (-1U); break;
       case 'p':	used_bits |= ENCODE_SBTYPE_IMM (-1U); break;
@@ -1042,7 +1053,6 @@ validate_riscv_insn (const struct riscv_opcode *opc, int length)
       case ']': break;
       case '0': break;
       case '1': break;
-      case 'l': used_bits |= ENCODE_ITYPE_IMM (-1U); break;
       case 'F': /* funct */
 	switch (c = *p++)
 	  {
@@ -1068,46 +1078,46 @@ validate_riscv_insn (const struct riscv_opcode *opc, int length)
 	     return FALSE;
 	  }
 	break;
-      case 'n':
-      {
-        char field_name[MAX_KEYWORD_LEN];
-        if (parse_nds_v5_field (&p, field_name))
-          {
-            if (strcmp (field_name, "nds_rc") == 0)
-        USE_BITS (OP_MASK_RC, OP_SH_RC);
-            else if (strcmp (field_name, "nds_rdp") == 0)
-        USE_BITS (OP_MASK_RD, OP_SH_RD);
-            else if (strcmp (field_name, "nds_rsp") == 0)
-        USE_BITS (OP_MASK_RD, OP_SH_RS1);
-            else if (strcmp (field_name, "nds_rtp") == 0)
-        USE_BITS (OP_MASK_RD, OP_SH_RS2);
-            else if (strcmp (field_name, "nds_i3u") == 0)
-        used_bits |= ENCODE_PTYPE_IMM3U (-1U);
-            else if (strcmp (field_name, "nds_i4u") == 0)
-        used_bits |= ENCODE_PTYPE_IMM4U (-1U);
-            else if (strcmp (field_name, "nds_i5u") == 0)
-        used_bits |= ENCODE_PTYPE_IMM5U (-1U);
-            else if (strcmp (field_name, "nds_i6u") == 0)
-        used_bits |= ENCODE_PTYPE_IMM6U (-1U);
-            else if (strcmp (field_name, "nds_i15s") == 0)
-        used_bits |= ENCODE_PTYPE_IMM15S (-1U);
-            else
+    case 'n':
+    {
+      char field_name[MAX_KEYWORD_LEN];
+      if (parse_nds_v5_field (&p, field_name))
+        {
+          if (strcmp (field_name, "nds_rc") == 0)
+      USE_BITS (OP_MASK_RC, OP_SH_RC);
+          else if (strcmp (field_name, "nds_rdp") == 0)
+      USE_BITS (OP_MASK_RD, OP_SH_RD);
+          else if (strcmp (field_name, "nds_rsp") == 0)
+      USE_BITS (OP_MASK_RD, OP_SH_RS1);
+          else if (strcmp (field_name, "nds_rtp") == 0)
+      USE_BITS (OP_MASK_RD, OP_SH_RS2);
+          else if (strcmp (field_name, "nds_i3u") == 0)
+      used_bits |= ENCODE_PTYPE_IMM3U (-1U);
+          else if (strcmp (field_name, "nds_i4u") == 0)
+      used_bits |= ENCODE_PTYPE_IMM4U (-1U);
+          else if (strcmp (field_name, "nds_i5u") == 0)
+      used_bits |= ENCODE_PTYPE_IMM5U (-1U);
+          else if (strcmp (field_name, "nds_i6u") == 0)
+      used_bits |= ENCODE_PTYPE_IMM6U (-1U);
+          else if (strcmp (field_name, "nds_i15s") == 0)
+      used_bits |= ENCODE_PTYPE_IMM15S (-1U);
+          else
+      as_bad (_("internal: bad RISC-V opcode "
+          "(unknown operand type `%s'): %s %s"),
+        field_name, opc->name, opc->args);
+        }
+      else
         as_bad (_("internal: bad RISC-V opcode "
-            "(unknown operand type `%s'): %s %s"),
-          field_name, opc->name, opc->args);
-          }
-        else
-          as_bad (_("internal: bad RISC-V opcode "
-              "(unknown operand type `%c'): %s %s"),
-            c, opc->name, opc->args);
-      }
-      break;
-      default:
-	as_bad (_("internal: bad RISC-V opcode "
-		  "(unknown operand type `%c'): %s %s"),
-		c, opc->name, opc->args);
-	return FALSE;
-      }
+            "(unknown operand type `%c'): %s %s"),
+          c, opc->name, opc->args);
+    }
+    break;
+    default:
+    as_bad (_("internal: bad RISC-V opcode "
+        "(unknown operand type `%c'): %s %s"),
+      c, opc->name, opc->args);
+    return FALSE;
+    }
 #undef USE_BITS
   if (used_bits != required_bits)
     {
@@ -2319,16 +2329,16 @@ riscv_ip (char *str, struct riscv_cl_insn *ip, expressionS *imm_expr,
 		}
 	      break;
       case 'l':
-	      my_getExpression (imm_expr, s);
-	      if (imm_expr->X_op != O_constant
-		  || imm_expr->X_add_number >= xlen
-		  || imm_expr->X_add_number < 0)
-		break;
-	      ip->insn_opcode |= ENCODE_SBTYPE_IMM6L (imm_expr->X_add_number);
-	      s = expr_end;
-	      imm_expr->X_op = O_absent;
-	      continue;
-        
+          my_getExpression (imm_expr, s);
+          if (imm_expr->X_op != O_constant
+        || imm_expr->X_add_number >= xlen
+        || imm_expr->X_add_number < 0)
+      break;
+          ip->insn_opcode |= ENCODE_SBTYPE_IMM6L (imm_expr->X_add_number);
+          s = expr_end;
+          imm_expr->X_op = O_absent;
+          continue;
+          
       case 'n':
 	      {
 		char field_name[MAX_KEYWORD_LEN];
@@ -3014,6 +3024,11 @@ riscv_after_parse_args (void)
   riscv_set_rve (FALSE);
   if (riscv_subset_supports ("e"))
     riscv_set_rve (TRUE);
+
+  /* Enable RVP if specified by the -march option.  */
+  riscv_set_rvp (FALSE);
+  if (riscv_subset_supports ("p"))
+    riscv_set_rvp (TRUE);
 
   /* If the -mpriv-spec isn't set, then we set the default privilege spec
      according to DEFAULT_PRIV_SPEC.  */

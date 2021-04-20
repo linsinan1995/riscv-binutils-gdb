@@ -338,11 +338,8 @@ enum riscv_insn_class
    INSN_CLASS_F,
    INSN_CLASS_D,
    INSN_CLASS_Q,
-   INSN_CLASS_P,
    INSN_CLASS_F_AND_C,
    INSN_CLASS_D_AND_C,
-   INSN_CLASS_ZP64,
-   INSN_CLASS_ZPN,
    INSN_CLASS_ZICSR,
    INSN_CLASS_ZIFENCEI,
    INSN_CLASS_ZIHINTPAUSE,
@@ -350,6 +347,9 @@ enum riscv_insn_class
    INSN_CLASS_ZBB,
    INSN_CLASS_ZBC,
    INSN_CLASS_ZBA_OR_ZBB,
+   INSN_CLASS_ZPN,
+   INSN_CLASS_ZPSF,
+   INSN_CLASS_ZPRV,
   };
 
 /* This structure holds information for a particular instruction.  */
