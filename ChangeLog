@@ -1,3 +1,10 @@
+2021-04-23  Andes-tech <andestech@andestech.com>
+	Shao-Chung Wang <scwang@andestech.com>
+	Lin Sinan  <sinan@isrc.iscas.ac.cn>
+
+	* Andes-tech and Shao-Chung Wang implemented the binutils part for the RISC-V 'p' extension with the spec version 0.51 with Binutils 2.32
+	* Sinan Lin updated the implementation to the spec version 0.93 with Binutils 2.36
+
 2021-01-26  Nick Alcock  <nick.alcock@oracle.com>
 
 	* Makefile.def: Add install-libctf dependency to install-ld.
