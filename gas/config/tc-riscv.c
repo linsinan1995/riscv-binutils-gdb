@@ -131,7 +131,7 @@ static const struct riscv_ext_version ext_version_table[] =
   {"c", ISA_SPEC_CLASS_20190608, 2, 0},
   {"c", ISA_SPEC_CLASS_2P2,      2, 0},
 
-  {"p", ISA_SPEC_CLASS_DRAFT, 0, 93},
+  {"p", ISA_SPEC_CLASS_DRAFT, 0, 94},
   
   {"zicsr", ISA_SPEC_CLASS_20191213, 2, 0},
   {"zicsr", ISA_SPEC_CLASS_20190608, 2, 0},
@@ -145,9 +145,9 @@ static const struct riscv_ext_version ext_version_table[] =
   {"zba",   ISA_SPEC_CLASS_DRAFT, 0, 93},
   {"zbc",   ISA_SPEC_CLASS_DRAFT, 0, 93},
   
-  {"zpn",   ISA_SPEC_CLASS_DRAFT, 0, 93},
-  {"zprv",   ISA_SPEC_CLASS_DRAFT, 0, 93},
-  {"zpsf",   ISA_SPEC_CLASS_DRAFT, 0, 93},
+  {"zpn",   ISA_SPEC_CLASS_DRAFT, 0, 94},
+  {"zprv",   ISA_SPEC_CLASS_DRAFT, 0, 94},
+  {"zpsf",   ISA_SPEC_CLASS_DRAFT, 0, 94},
   /* Terminate the list.  */
   {NULL, 0, 0, 0}
 };
