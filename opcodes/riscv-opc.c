@@ -548,6 +548,17 @@ const struct riscv_opcode riscv_opcodes[] =
 {"clmulh",    0, INSN_CLASS_ZBC,   "d,s,t",  MATCH_CLMULH, MASK_CLMULH, match_opcode, 0 },
 {"clmulr",    0, INSN_CLASS_ZBC,   "d,s,t",  MATCH_CLMULR, MASK_CLMULR, match_opcode, 0 },
 
+/* ZCE subset - ZCEA/ZCEB/ZCEE, where ZCEE is a subset of ZCEA  */
+{"c.sext.b",   0,  INSN_CLASS_ZCEE, "d,s",  MATCH_C_SEXT_B, MASK_C_SEXT_B, match_opcode, 0 },
+{"c.sext.h",   0,  INSN_CLASS_ZCEE, "d,s",  MATCH_C_SEXT_H, MASK_C_SEXT_H, match_opcode, 0 },
+{"c.zext.b",   0,  INSN_CLASS_ZCEE, "d,s",  MATCH_C_ZEXT_B, MASK_C_ZEXT_B, match_opcode, 0 },
+{"c.zext.h",   0,  INSN_CLASS_ZCEE, "d,s",  MATCH_C_ZEXT_H, MASK_C_ZEXT_H, match_opcode, 0 },
+{"c.sext.w",   64, INSN_CLASS_ZCEE, "d,s",  MATCH_C_ADDIW, MASK_C_ADDIW | MASK_RVC_IMM, match_opcode, INSN_ALIAS },
+{"c.zext.w",   0,  INSN_CLASS_ZCEE, "d,s",  MATCH_C_ZEXT_W, MASK_C_ZEXT_W, match_opcode, 0 },
+{"c.neg",      0,  INSN_CLASS_ZCEA, "d,s",  MATCH_C_NEG, MASK_C_NEG, match_opcode, 0 },
+{"c.mul",      0,  INSN_CLASS_ZCEA, "d,s",  MATCH_C_MUL, MASK_C_MUL, match_opcode, 0 },
+{"c.mva01s07", 64, INSN_CLASS_ZCEA, "d,d",  MATCH_C_MVA01S07, MASK_C_MVA01S07, match_mva01s07_opcode, 0 },
+
 /* Single-precision floating-point instruction subset */
 {"frcsr",     0, INSN_CLASS_F,   "d",  MATCH_FRCSR, MASK_FRCSR, match_opcode, INSN_ALIAS },
 {"frsr",      0, INSN_CLASS_F,   "d",  MATCH_FRCSR, MASK_FRCSR, match_opcode, INSN_ALIAS },
@@ -984,6 +995,9 @@ const struct riscv_ext_version riscv_ext_version_table[] =
 {"zbb", ISA_SPEC_CLASS_DRAFT, 0, 93},
 {"zbc", ISA_SPEC_CLASS_DRAFT, 0, 93},
 
+{"zcea", ISA_SPEC_CLASS_DRAFT, 2, 0},
+{"zceb", ISA_SPEC_CLASS_DRAFT, 2, 0},
+{"zcee", ISA_SPEC_CLASS_DRAFT, 2, 0}
 /* Terminate the list.  */
 {NULL, 0, 0, 0}
 };
