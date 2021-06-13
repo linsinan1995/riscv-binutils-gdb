@@ -549,15 +549,28 @@ const struct riscv_opcode riscv_opcodes[] =
 {"clmulr",    0, INSN_CLASS_ZBC,   "d,s,t",  MATCH_CLMULR, MASK_CLMULR, match_opcode, 0 },
 
 /* ZCE subset - ZCEA/ZCEB/ZCEE, where ZCEE is a subset of ZCEA  */
-{"c.sext.b",   0,  INSN_CLASS_ZCEE, "d,s",  MATCH_C_SEXT_B, MASK_C_SEXT_B, match_opcode, 0 },
-{"c.sext.h",   0,  INSN_CLASS_ZCEE, "d,s",  MATCH_C_SEXT_H, MASK_C_SEXT_H, match_opcode, 0 },
-{"c.zext.b",   0,  INSN_CLASS_ZCEE, "d,s",  MATCH_C_ZEXT_B, MASK_C_ZEXT_B, match_opcode, 0 },
-{"c.zext.h",   0,  INSN_CLASS_ZCEE, "d,s",  MATCH_C_ZEXT_H, MASK_C_ZEXT_H, match_opcode, 0 },
-{"c.sext.w",   64, INSN_CLASS_ZCEE, "d,s",  MATCH_C_ADDIW, MASK_C_ADDIW | MASK_RVC_IMM, match_opcode, INSN_ALIAS },
-{"c.zext.w",   0,  INSN_CLASS_ZCEE, "d,s",  MATCH_C_ZEXT_W, MASK_C_ZEXT_W, match_opcode, 0 },
-{"c.neg",      0,  INSN_CLASS_ZCEA, "d,s",  MATCH_C_NEG, MASK_C_NEG, match_opcode, 0 },
-{"c.mul",      0,  INSN_CLASS_ZCEA, "d,s",  MATCH_C_MUL, MASK_C_MUL, match_opcode, 0 },
-{"c.mva01s07", 64, INSN_CLASS_ZCEA, "d,d",  MATCH_C_MVA01S07, MASK_C_MVA01S07, match_mva01s07_opcode, 0 },
+{"c.sext.b",     0,  INSN_CLASS_ZCEE,  "Cw",  MATCH_C_SEXT_B, MASK_C_SEXT_B, match_opcode, 0 },
+{"c.sext.h",     0,  INSN_CLASS_ZCEE,  "Cw",  MATCH_C_SEXT_H, MASK_C_SEXT_H, match_opcode, 0 },
+{"c.zext.b",     0,  INSN_CLASS_ZCEE,  "Cw",  MATCH_C_ZEXT_B, MASK_C_ZEXT_B, match_opcode, 0 },
+{"c.zext.h",     0,  INSN_CLASS_ZCEE,  "Cw",  MATCH_C_ZEXT_H, MASK_C_ZEXT_H, match_opcode, 0 },
+{"c.sext.w",     64, INSN_CLASS_ZCEE,  "Cw",  MATCH_C_ADDIW, MASK_C_ADDIW | MASK_RVC_IMM, match_opcode, INSN_ALIAS },
+{"c.zext.w",     64, INSN_CLASS_ZCEE,  "Cw",  MATCH_C_ZEXT_W, MASK_C_ZEXT_W, match_opcode, 0 },
+{"c.not",        0,  INSN_CLASS_ZCEA,  "Cw",  MATCH_C_NOT, MASK_C_NOT, match_opcode, 0 },
+{"c.neg",        0,  INSN_CLASS_ZCEA,  "Cw",  MATCH_C_NEG, MASK_C_NEG, match_opcode, 0 },
+{"c.mul",        0,  INSN_CLASS_ZCEA,  "Cw,Ct",  MATCH_C_MUL, MASK_C_MUL, match_opcode, 0 },
+{"muli",         0,  INSN_CLASS_ZCEA,  "d,s,j",  MATCH_MULI, MASK_MULI, match_opcode, 0 },
+{"beqi",         0,  INSN_CLASS_ZCEA,  "s,Cb,p",  MATCH_BEQI, MASK_BEQI, match_opcode, INSN_CONDBRANCH },
+{"bnei",         0,  INSN_CLASS_ZCEA,  "s,Cb,p",  MATCH_BNEI, MASK_BNEI, match_opcode, INSN_CONDBRANCH },
+
+{"c.mva01s07", 64, INSN_CLASS_ZCEA,  "Cr1,Cr2",  MATCH_C_MVA01S07, MASK_C_MVA01S07, match_opcode, 0 }, 
+
+{"c.decbnez",  0,  INSN_CLASS_ZCEA, "CZr,CZD,p",  MASK_C_DECBNEZ, MASK_C_DECBNEZ, match_opcode, INSN_CONDBRANCH }, // todo
+{"decbnez",    0,  INSN_CLASS_ZCEA, "s,CZb,p",  MASK_DECBNEZ, MASK_DECBNEZ, match_opcode, INSN_CONDBRANCH }, // todo
+
+{"lwgp",       0,  INSN_CLASS_ZCEA, "d,CZl",  MATCH_LWGP, MASK_LWGP, match_opcode, INSN_DREF|INSN_4_BYTE }, // todo CZl, CZs
+{"swgp",       0,  INSN_CLASS_ZCEA, "t,CZs",  MATCH_SWGP, MASK_SWGP, match_opcode, INSN_DREF|INSN_4_BYTE },
+{"ldgp",       0,  INSN_CLASS_ZCEA, "d,CZl",  MATCH_LDGP, MASK_LDGP, match_opcode, INSN_DREF|INSN_8_BYTE },
+{"sdgp",       0,  INSN_CLASS_ZCEA, "t,CZs",  MATCH_SDGP, MASK_SDGP, match_opcode, INSN_DREF|INSN_8_BYTE },
 
 /* Single-precision floating-point instruction subset */
 {"frcsr",     0, INSN_CLASS_F,   "d",  MATCH_FRCSR, MASK_FRCSR, match_opcode, INSN_ALIAS },

@@ -969,6 +969,16 @@ validate_riscv_insn (const struct riscv_opcode *opc, int length)
 	  case 'S': USE_BITS (OP_MASK_CRS1S, OP_SH_CRS1S); break;
 	  case 'T': USE_BITS (OP_MASK_CRS2, OP_SH_CRS2); break;
 	  case 'D': USE_BITS (OP_MASK_CRS2S, OP_SH_CRS2S); break;
+    case 'b': used_bits |= ENCODE_ZCE_BEQI (-1U); break;
+    case 'r':
+      if (*p == '1')
+      {
+        USE_BITS (OP_MASK_ZCERD, OP_SH_ZCERD); ++p; break;
+      }
+      else if (*p == '2')
+      {
+        USE_BITS (OP_MASK_ZCESUBR2, OP_SH_ZCESUBR2); ++p; break;
+      }
 	  case 'F': /* funct */
 	    switch (c = *p++)
 	      {
@@ -2190,6 +2200,65 @@ riscv_ip (char *str, struct riscv_cl_insn *ip, expressionS *imm_expr,
 		    break;
 		  INSERT_OPERAND (CRS2, *ip, regno);
 		  continue;
+    case 'b':
+      if (my_getSmallExpression (imm_expr, imm_reloc, s, p)
+		      || imm_expr->X_op != O_constant
+          || !VALID_ZCE_BEQI (imm_expr->X_add_number))
+         break;
+      ip->insn_opcode |= ENCODE_ZCE_BEQI (imm_expr->X_add_number);
+      goto rvc_imm_done;
+    case 'r':
+      if (my_getSmallExpression (imm_expr, imm_reloc, s, p)
+      {
+        
+      }
+      if (args[1] == '1') 
+      {
+        ++args;
+        if (VALID_ZCE_SREG1 (imm_expr->X_add_number))
+        {
+          ip->insn_opcode |= ENCODE_ZCE_SREG1 (imm_expr->X_add_number);
+        }
+        goto rvc_imm_done;
+      }
+      else if (args[1] == '2') 
+      {
+        ++args;
+        if (VALID_ZCE_SREG2 (imm_expr->X_add_number))
+        {
+          ip->insn_opcode |= ENCODE_ZCE_SREG2 (imm_expr->X_add_number);
+        }
+        goto rvc_imm_done;
+      }
+    case 'Z': /* ZCE extension */
+      switch (*++args)
+        {
+          case 'x':
+            if (*(args+1) == '1') 
+              if (VALID_ZCE_SREG1 (imm_expr->X_add_number))
+              {
+                ip->insn_opcode |= ENCODE_ZCE_SREG1 (imm_expr->X_add_number);
+              }
+            else if (*(args+1) == '2') 
+              if (VALID_ZCE_SREG2 (imm_expr->X_add_number))
+              {
+                ip->insn_opcode |= ENCODE_ZCE_SREG2 (imm_expr->X_add_number);
+              }
+            else
+              {
+                args++;
+                break;
+              }
+            args++;
+            goto rvc_imm_done;
+          case 'D':
+              if (my_getSmallExpression (imm_expr, imm_reloc, s, p)
+              || !VALID_ZCE_C_DECBNEZ ((valueT) imm_expr->X_add_number))
+            break;
+          ip->insn_opcode |=
+            ENCODE_ZCE_C_DECBNEZ (imm_expr->X_add_number);
+          goto rvc_imm_done;
+        }
 		case 'F':
 		  switch (*++args)
 		    {
