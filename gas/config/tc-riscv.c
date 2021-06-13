@@ -2190,6 +2190,22 @@ riscv_ip (char *str, struct riscv_cl_insn *ip, expressionS *imm_expr,
 		    break;
 		  INSERT_OPERAND (CRS2, *ip, regno);
 		  continue;
+    case 'Z': /* ZCE extension */
+      switch (*++args)
+        {
+          case 'b':
+            if (VALID_ZCE_BEQI (imm_expr->X_add_number))
+              ip->insn_opcode |= ENCODE_ZCE_BEQI (imm_expr->X_add_number);
+            else
+              break;
+            goto rvc_imm_done;
+          case 'd':
+            if (VALID_ZCE_BEQI (imm_expr->X_add_number))
+              ip->insn_opcode |= ENCODE_ZCE_BEQI (imm_expr->X_add_number);
+            else
+              break;
+            goto rvc_imm_done;
+        }
 		case 'F':
 		  switch (*++args)
 		    {
