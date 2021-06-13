@@ -258,6 +258,18 @@ print_insn_args (const char *d, insn_t l, bfd_vma pc, disassemble_info *info)
 	      print (info->stream, "%s",
 		     riscv_fpr_names[EXTRACT_OPERAND (CRS2S, l) + 8]);
 	      break;
+		case 'b':
+		  print (info->stream, "0x%x", (int)EXTRACT_ZCE_BEQI (l) & 0xf);
+		  break;
+		case 'r':
+		  if (d[1] == '1')
+		  {
+			print (info->stream, "0x%x", (int)EXTRACT_ZCE_SREG1 (l) & 0xf);
+		  }
+		  else if (d[1] == '2')
+		  {
+			print (info->stream, "0x%x", (int)EXTRACT_ZCE_SREG2 (l) & 0xf);
+		  }
 	    }
 	  break;
 
