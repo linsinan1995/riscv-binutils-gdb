@@ -557,18 +557,18 @@ const struct riscv_opcode riscv_opcodes[] =
 {"zext.w",     64, INSN_CLASS_ZCEE,  "CZd",  MATCH_C_ZEXT_W, MASK_C_ZEXT_W, match_opcode, 0 },
 {"neg",        0,  INSN_CLASS_ZCEA,  "CZd",  MATCH_C_NEG, MASK_C_NEG, match_opcode, 0 },
 {"mul",        0,  INSN_CLASS_ZCEA,  "CZd,CZs",  MATCH_C_MUL, MASK_C_MUL, match_opcode, 0 },
-{"c.mva01s07", 64, INSN_CLASS_ZCEA,  "Cx,Cx",  MATCH_C_MVA01S07, MASK_C_MVA01S07, match_opcode, 0 }, // todo
+{"c.mva01s07", 64, INSN_CLASS_ZCEA,  "CZx1,CZx2",  MATCH_C_MVA01S07, MASK_C_MVA01S07, match_opcode, 0 }, 
 {"muli",       0,  INSN_CLASS_ZCEA,  "d,s,j",  MATCH_MULI, MASK_MULI, match_opcode, 0 },
 {"beqi",       0,  INSN_CLASS_ZCEA,  "s,CZb,p",  MATCH_BEQI, MASK_BEQI, match_opcode, INSN_CONDBRANCH },
 {"bnei",       0,  INSN_CLASS_ZCEA,  "s,CZb,p",  MATCH_BNEI, MASK_BNEI, match_opcode, INSN_CONDBRANCH },
-  
-{"decbnez",    0,  INSN_CLASS_ZCEA, "s,CZb,p",  MASK_C_DECBNEZ, MASK_C_DECBNEZ, match_opcode, INSN_CONDBRANCH }, // todo
+
+{"c.decbnez",  0,  INSN_CLASS_ZCEA, "CZr,CZD,p",  MASK_C_DECBNEZ, MASK_C_DECBNEZ, match_opcode, INSN_CONDBRANCH }, // todo
 {"decbnez",    0,  INSN_CLASS_ZCEA, "s,CZb,p",  MASK_DECBNEZ, MASK_DECBNEZ, match_opcode, INSN_CONDBRANCH }, // todo
 
-{"lw",         0,  INSN_CLASS_ZCEA, "d,CZl",  MATCH_LWGP, MASK_LWGP, match_opcode, INSN_DREF|INSN_4_BYTE }, // todo CZl, CZs
-{"sw",         0,  INSN_CLASS_ZCEA, "t,CZs",  MATCH_SWGP, MASK_SWGP, match_opcode, INSN_DREF|INSN_4_BYTE },
-{"ld",         0,  INSN_CLASS_ZCEA, "d,CZl",  MATCH_LDGP, MASK_LDGP, match_opcode, INSN_DREF|INSN_8_BYTE },
-{"sd",         0,  INSN_CLASS_ZCEA, "t,CZs",  MATCH_SDGP, MASK_SDGP, match_opcode, INSN_DREF|INSN_8_BYTE },
+{"lwgp",       0,  INSN_CLASS_ZCEA, "d,CZl",  MATCH_LWGP, MASK_LWGP, match_opcode, INSN_DREF|INSN_4_BYTE }, // todo CZl, CZs
+{"swgp",       0,  INSN_CLASS_ZCEA, "t,CZs",  MATCH_SWGP, MASK_SWGP, match_opcode, INSN_DREF|INSN_4_BYTE },
+{"ldgp",       0,  INSN_CLASS_ZCEA, "d,CZl",  MATCH_LDGP, MASK_LDGP, match_opcode, INSN_DREF|INSN_8_BYTE },
+{"sdgp",       0,  INSN_CLASS_ZCEA, "t,CZs",  MATCH_SDGP, MASK_SDGP, match_opcode, INSN_DREF|INSN_8_BYTE },
 
 /* Single-precision floating-point instruction subset */
 {"frcsr",     0, INSN_CLASS_F,   "d",  MATCH_FRCSR, MASK_FRCSR, match_opcode, INSN_ALIAS },
