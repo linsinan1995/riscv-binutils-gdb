@@ -828,6 +828,8 @@ const struct riscv_opcode riscv_opcodes[] =
 {"clmulh",     0, INSN_CLASS_ZBC,  "d,s,t",    MATCH_CLMULH, MASK_CLMULH, match_opcode, 0 },
 {"clmulr",     0, INSN_CLASS_ZBC,  "d,s,t",    MATCH_CLMULR, MASK_CLMULR, match_opcode, 0 },
 
+/* ZCE subset - ZCEA/ZCEB/ZCEE, where ZCEE is a subset of ZCEA  */
+
 /* Terminate the list.  */
 {0, 0, INSN_CLASS_NONE, 0, 0, 0, 0, 0}
 };

@@ -143,6 +143,9 @@ static const struct riscv_ext_version ext_version_table[] =
   {"zba",   ISA_SPEC_CLASS_DRAFT, 0, 93},
   {"zbc",   ISA_SPEC_CLASS_DRAFT, 0, 93},
 
+  {"zcea", ISA_SPEC_CLASS_DRAFT, 2, 0},
+  {"zceb", ISA_SPEC_CLASS_DRAFT, 2, 0},
+  {"zcee", ISA_SPEC_CLASS_DRAFT, 2, 0}
   /* Terminate the list.  */
   {NULL, 0, 0, 0}
 };
@@ -340,6 +343,13 @@ riscv_multi_subset_supports (enum riscv_insn_class insn_class)
       return riscv_subset_supports ("zba");
     case INSN_CLASS_ZBC:
       return riscv_subset_supports ("zbc");
+
+    case INSN_CLASS_ZCEA:
+      return riscv_subset_supports ("zcea");
+    case INSN_CLASS_ZCEB:
+      return riscv_subset_supports ("zceb");
+    case INSN_CLASS_ZCEE:
+      return riscv_subset_supports ("zcee");
 
     default:
       as_fatal ("internal: unreachable");
